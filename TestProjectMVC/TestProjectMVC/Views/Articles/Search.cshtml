@@ -1,0 +1,68 @@
+@model IEnumerable<TestProjectMVC.Models.ArticleViewModel>
+@{
+    ViewData["Title"] = "Search Articles";
+    string? searchTitle = ViewBag.SearchTitle as string;
+}
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Articles">Articles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Search</li>
+    </ol>
+</nav>
+
+<h1>Search Articles</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Search" asp-controller="Articles" method="get" class="row g-2">
+            <div class="col-md-9">
+                <input type="text" name="title" value="@searchTitle" class="form-control" placeholder="Search by title..." />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(searchTitle))
+{
+    <p class="text-muted">
+        Search results for: <strong>@searchTitle</strong> &mdash; @Model.Count() article(s) found.
+    </p>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No articles found matching your search.</div>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var article in Model)
+            {
+                <a asp-action="Details" asp-route-id="@article.Id" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@article.Title</h5>
+                        <small class="text-muted">@article.CreatedAt.ToString("dd MMM yyyy")</small>
+                    </div>
+                    <p class="mb-1 text-muted small">@(article.Text.Length > 120 ? article.Text[..120] + "..." : article.Text)</p>
+                    <div>
+                        @if (!string.IsNullOrEmpty(article.Tag))
+                        {
+                            <span class="badge bg-primary">@article.Tag</span>
+                        }
+                        @if (article.IsPublished)
+                        {
+                            <span class="badge bg-success">Published</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Draft</span>
+                        }
+                    </div>
+                </a>
+            }
+        </div>
+    }
+}

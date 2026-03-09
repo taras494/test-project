@@ -1,0 +1,53 @@
+@model IEnumerable<TestProjectMVC.Models.ArticleViewModel>
+@{
+    ViewData["Title"] = $"Articles tagged: {ViewBag.Tag}";
+}
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Articles">Articles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Tag: @ViewBag.Tag</li>
+    </ol>
+</nav>
+
+<h1>Articles tagged: <span class="badge bg-primary">@ViewBag.Tag</span></h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-3">No articles found with this tag.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-1">
+        @foreach (var article in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a asp-action="Details" asp-route-id="@article.Id" class="text-decoration-none text-dark">
+                                @article.Title
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted small">
+                            @article.CreatedAt.ToString("dd MMM yyyy")
+                            &bull;
+                            @if (article.IsPublished)
+                            {
+                                <span class="badge bg-success">Published</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Draft</span>
+                            }
+                        </p>
+                        <p class="card-text">@(article.Text.Length > 150 ? article.Text[..150] + "..." : article.Text)</p>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a asp-action="Details" asp-route-id="@article.Id" class="btn btn-sm btn-outline-primary">Read more</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

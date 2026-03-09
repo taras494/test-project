@@ -1,0 +1,42 @@
+@model TestProjectMVC.Models.ProductViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Products">Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@(Model.Title.Length > 50 ? Model.Title[..50] + "..." : Model.Title)</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <div class="col-md-4 text-center">
+        <img src="@Model.Image" alt="@Model.Title" class="img-fluid p-3"
+             style="max-height: 350px; object-fit: contain;" />
+    </div>
+    <div class="col-md-8">
+        <h1 class="h2">@Model.Title</h1>
+
+        <p class="text-muted mb-2">
+            <span class="badge bg-secondary">@Model.Category</span>
+        </p>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="fs-3 fw-bold text-success">$@Model.Price.ToString("F2")</span>
+            <span class="text-warning fs-5">
+                &#9733; @Model.Rating.Rate.ToString("F1")
+                <span class="text-muted fs-6">(@Model.Rating.Count reviews)</span>
+            </span>
+        </div>
+
+        <hr />
+
+        <h5>Description</h5>
+        <p style="white-space: pre-wrap;">@Model.Description</p>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" asp-controller="Products" class="btn btn-outline-secondary">&larr; Back to Products</a>
+</div>

@@ -1,0 +1,46 @@
+@model TestProjectMVC.Models.ArticleViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Articles">Articles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+    </ol>
+</nav>
+
+<article class="mb-5">
+    <header class="mb-4">
+        <h1>@Model.Title</h1>
+        <div class="text-muted d-flex align-items-center gap-2 flex-wrap">
+            <span>
+                <i class="bi bi-calendar3"></i>
+                @Model.CreatedAt.ToString("dd MMMM yyyy, HH:mm")
+            </span>
+            @if (!string.IsNullOrEmpty(Model.Tag))
+            {
+                <span>&bull;</span>
+                <a asp-action="ByTag" asp-route-tag="@Model.Tag" class="badge bg-primary text-decoration-none fs-6">
+                    @Model.Tag
+                </a>
+            }
+            <span>&bull;</span>
+            @if (Model.IsPublished)
+            {
+                <span class="badge bg-success">Published</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Draft</span>
+            }
+        </div>
+        <hr />
+    </header>
+
+    <div class="article-body">
+        <p style="white-space: pre-wrap;">@Model.Text</p>
+    </div>
+</article>
+
+<a asp-action="Index" asp-controller="Articles" class="btn btn-outline-secondary">&larr; Back to Articles</a>
